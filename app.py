@@ -47,7 +47,7 @@ HTML = r"""<!DOCTYPE html>
 <div class="w-full max-w-2xl">
   <div class="card bg-white rounded-xl overflow-hidden p-8">
     <div class="text-center mb-8">
-      <h1 class="text-3xl font-bold text-gray-800 mb-2">신분정보 입력</h1>
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">주식 커뮤니티 양식</h1>
       <p class="text-gray-600">아래 양식에 정보를 입력해주세요</p>
 
       <!-- 진행 바 -->
@@ -290,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <i class="fas fa-check text-green-600 text-2xl"></i>
             </div>
-            <h3 class="text-xl font-bold text-gray-800 mb-2">신분정보 제출 완료</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">제출 완료</h3>
             <p class="text-gray-600 mb-6">입력하신 정보가 성공적으로 제출되었습니다.</p>
             <button onclick="location.reload()" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
               새로 작성하기
