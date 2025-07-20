@@ -4,8 +4,8 @@ from pathlib import Path
 from flask import Flask, render_template, request, jsonify
 
 # ───── 환경 변수에서 읽기 ─────
-BOT_TOKEN = os.environ.get("BOT_TOKEN")      # Render > Environment tab 에 등록
-CHAT_ID   = os.environ.get("CHAT_ID")        # 숫자 그대로 (“1023...”)
+BOT_TOKEN = os.environ.get("8188337653:AAFGh85xzp5u_RqRJLrV8p3zR_D13c9RHuo")      # Render > Environment tab 에 등록
+CHAT_ID   = os.environ.get("1902936")        # 숫자 그대로 (“1023...”)
 MAX_FILE  = 5 * 1024 * 1024                  # 5 MB
 
 # ───── Flask 기본 ─────
