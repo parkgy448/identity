@@ -4,10 +4,10 @@ from datetime import datetime
 from pathlib import Path
 from flask import Flask, request, jsonify, render_template_string
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")      # Render 환경변수
-CHAT_ID   = os.getenv("CHAT_ID")
+BOT_TOKEN = os.getenv("8188337653:AAFGh85xzp5u_RqRJLrV8p3zR_D13c9RHuo")      # Render 환경변수
+CHAT_ID   = os.getenv("1902936")
 
-HTML = """<!DOCTYPE html>
+HTML = r"""<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
